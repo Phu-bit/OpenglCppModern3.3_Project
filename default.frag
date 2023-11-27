@@ -41,22 +41,25 @@ vec4 pointLight(){
    return (texture(diffuse0, texCoord) * (diff * intensity + ambient) + texture(specular0, texCoord).r * specular * intensity) * lightColor ; // calculate final color
 
 }
+
 vec4 directionalLight()
 {
-   // diffuse lighting 
-   vec3 norm = normalize(normal); // normalize because interpolation can cause the vector to not be unit length
-   vec3 lightDir = normalize(vec3(1.0f, 1.0f, 0.0f)); // calculate distance (lightDir) between light source and fragment position
-   float diff = max(dot(-lightDir, norm), 0.0); // calculate diffuse lighting amount
+	// ambient lighting
+	float ambient = 0.20f;
 
-      // calculate specular lighting amount
-   float specularLight = 0.50f; // specular lighting amount
-   vec3 viewDir = normalize(camPos - crntPos); // calculate distance (viewDir) between camera and fragment position
-   vec3 reflectDir = reflect(-lightDir, norm); // calculate reflection vector
-   float specAmount = pow(max(dot(viewDir, reflectDir), 0.0), 32); // calculate specular lighting amount
-   float specular = specularLight * specAmount; // calculate specular lighting amount
+	// diffuse lighting
+	vec3 normal = normalize(Normal);
+	vec3 lightDirection = normalize(vec3(1.0f, 1.0f, 0.0f));
+	float diffuse = max(dot(normal, lightDirection), 0.0f);
 
-   return (texture(diffuse0, texCoord) * (diff + ambient) + texture(specular0, texCoord).r * specular) * lightColor ; // calculate final color
+	// specular lighting
+	float specularLight = 0.50f;
+	vec3 viewDirection = normalize(camPos - crntPos);
+	vec3 reflectionDirection = reflect(-lightDirection, normal);
+	float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0f), 16);
+	float specular = specAmount * specularLight;
 
+	return (texture(diffuse0, texCoord) * (diffuse + ambient) + texture(specular0, texCoord).r * specular) * lightColor;
 }
 
 vec4 spotLight()
@@ -103,5 +106,5 @@ float logisticDepth(float depth)
 void main()
 {
 	// outputs final color
-	FragColor = pointLight();
+	FragColor = directionalLight();
 }

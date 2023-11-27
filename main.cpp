@@ -38,7 +38,7 @@ int main()
 	glViewport(0, 0, width, height);
 
 
-
+	
 
 
 	// Generate Shader
@@ -54,10 +54,6 @@ int main()
 	shaderProgram.Activate();
 	glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
 	glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
-
-
-
-
 
 
 	// Enable depth testing
