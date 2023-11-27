@@ -107,6 +107,10 @@
     <None Include="Shaders\framebuffer\framebuffer.vert">
       <Filter>Resource Files\Shaders</Filter>
     </None>
+    <None Include="Shaders\skybox\skybox.vert" />
+    <None Include="Shaders\skybox\skybox.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="shaderClass.h">
