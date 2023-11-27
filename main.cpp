@@ -24,6 +24,10 @@ float rectangleVertices[] =
 
 int main()
 {
+
+	/**
+	 *  Setup OpenGL context
+	 */
 	// Initialize GLFW
 	glfwInit();
 	// Tell GLFW what version of opengl we are using
@@ -50,38 +54,52 @@ int main()
 	gladLoadGL();
 	// Specify the viewport of Opengl
 	glViewport(0, 0, width, height);
-
-	// Generate Shader
+	
+	/*
+	* Generate Shaders
+	*/
 	Shader shaderProgram("Shaders/default/default.vert", "Shaders/default/default.frag");
 	Shader frameBufferProgram("Shaders/framebuffer/framebuffer.vert", "Shaders/framebuffer/framebuffer.frag");
 
-	// Light 
+	/**
+	 * Light
+	 * */  
 	glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	glm::vec3 lightPos = glm::vec3(0.0f, 1.0f, 0.0f);
 	glm::mat4 lightModel = glm::mat4(1.0f); 
 	lightModel = glm::translate(lightModel, lightPos);
 
+	/**
+	 * Setup Shader Uniforms
+	*/
 	// Activate the shader program and send the uniforms to the GPU
 	shaderProgram.Activate();
 	glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
 	glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
 	frameBufferProgram.Activate();
 	glUniform1i(glGetUniformLocation(frameBufferProgram.ID, "screenTexture"), 0);
-
-	// Enable depth testing
+	
+	/**
+	 * Setup OpenGL options
+	 */
 	glEnable(GL_DEPTH_TEST);
-
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_FRONT);
 	glFrontFace(GL_CCW);
 
-	// Set up our camera
+	/**
+	 * Setup Camera
+	 */
 	Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
 
-	// Load models
+	/**
+	 * Load models
+	 * */ 
 	Model ground("Resources/models/sword/scene.gltf");
-
-		// Prepare framebuffer rectangle VBO and VAO
+	/**
+	 * Render to Framebuffer
+	 */
+	// Prepare framebuffer rectangle VBO and VAO
 	unsigned int rectVAO, rectVBO;
 	glGenVertexArrays(1, &rectVAO);
 	glGenBuffers(1, &rectVBO);
@@ -121,55 +139,73 @@ int main()
 	if (fboStatus != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "Framebuffer error: " << fboStatus << std::endl;
 
-	// Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
+	/**
+	 * Setup Dear ImGui context
+	 */ 
+	IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
     ImGui::StyleColorsDark();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
-
 	// Main while loop
 	while (!glfwWindowShouldClose(window))
 	{
-		glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-		// Clear color and depth buffer
-		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glEnable(GL_DEPTH_TEST);
-		// Start new ImGui frame
-		ImGui_ImplOpenGL3_NewFrame();
+		/**
+		 * Bind framebuffer, clear color, enable depth testing, and clear depth buffer
+		 */
+		glBindFramebuffer(GL_FRAMEBUFFER, FBO); // Bind the framebuffer so we can render to it
+		glClearColor(0.07f, 0.13f, 0.17f, 1.0f); // Clear the screen to a dark blue color
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the color buffer and the depth buffer
+		glEnable(GL_DEPTH_TEST); // Enable depth testing
+
+		/**
+		 * ImGui new frame
+		*/
+		ImGui_ImplOpenGL3_NewFrame(); 
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		// Camera input and matrix update
+		/*
+		* Camera input and matrix update
+		*/ 
 		camera.Inputs(window);
 		camera.updateMatrix(45.0f, 0.1f, 1000.0f); // FOV, near plane, far plane
 
-		// Activate shader
+		/**
+		 * draw models
+		 * */ 
 		ground.Draw(shaderProgram, camera);
 
-		// ImGui window for light control
+		/**
+		 * ImGui window
+		*/
 		ImGui::Begin("Light Controls");
 		ImGui::SliderFloat3("Light Pos", &lightPos.x, 0.0f, 2.0f);
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
 		ImGui::End();
 
+		/**
+		 * Render to default framebuffer
+		*/
 		// Bind the default framebuffer
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		// Draw the framebuffer rectangle
-		frameBufferProgram.Activate();
-		glBindVertexArray(rectVAO);
+		frameBufferProgram.Activate(); // Activate the framebuffer shader
+		glBindVertexArray(rectVAO); // Bind the rectangle VAO
 		glDisable(GL_DEPTH_TEST); // prevents framebuffer rectangle from being discarded
-		glDisable(GL_CULL_FACE);
-		glBindTexture(GL_TEXTURE_2D, framebufferTexture);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glDisable(GL_CULL_FACE); // prevents framebuffer rectangle from being discarded
+		glBindTexture(GL_TEXTURE_2D, framebufferTexture); // Bind the framebuffer texture
+		glDrawArrays(GL_TRIANGLES, 0, 6); // Draw the rectangle
 
-		// Render ImGui
+		/**
+		 * Render ImGui
+		 * */ 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
+		
+		
 		// Swap the back buffer with the front buffer
 		glfwSwapBuffers(window);
 
@@ -177,6 +213,10 @@ int main()
 		glfwPollEvents();
 	}
 
+
+	/**
+	 * Cleanup
+	 */
 	// Delete all the objects we've created
 	shaderProgram.Delete();
 	glDeleteFramebuffers(1, &FBO);
@@ -189,5 +229,7 @@ int main()
 	// Delete Window before ending program
 	glfwDestroyWindow(window);
 	glfwTerminate();
+	
+
 	return 0;
 }
