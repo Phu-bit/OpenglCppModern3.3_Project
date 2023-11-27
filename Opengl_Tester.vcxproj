@@ -171,10 +171,14 @@
     <ClCompile Include="VBO.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="default.frag" />
-    <None Include="default.vert" />
-    <None Include="light.frag" />
-    <None Include="light.vert" />
+    <None Include="Shaders\default\default.frag" />
+    <None Include="Shaders\default\default.vert" />
+    <None Include="Shaders\framebuffer\framebuffer.frag" />
+    <None Include="Shaders\framebuffer\framebuffer.vert" />
+    <None Include="Shaders\light\light.frag" />
+    <None Include="Shaders\light\light.vert" />
+    <None Include="Shaders\transparency\transparency.frag" />
+    <None Include="Shaders\transparency\transparency.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />

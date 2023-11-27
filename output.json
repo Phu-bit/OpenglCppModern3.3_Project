@@ -1,7 +1,7 @@
 {
     "Version": "1.0",
     "Data": {
-        "Source": "c:\\school(from c drive)\\computer graphics\\test_programming\\opengl_tester\\model.cpp",
+        "Source": "c:\\school(from c drive)\\computer graphics\\test_programming\\opengl_tester\\main.cpp",
         "Includes": [
             "c:\\school(from c drive)\\computer graphics\\test_programming\\opengl_tester\\model.h",
             "c:\\school(from c drive)\\computer graphics\\test_programming\\opengl_tester\\libraries\\include\\json\\json.h",
@@ -361,7 +361,13 @@
             "c:\\program files (x86)\\microsoft visual studio\\2019\\community\\vc\\tools\\msvc\\14.27.29110\\include\\sstream",
             "c:\\program files (x86)\\microsoft visual studio\\2019\\community\\vc\\tools\\msvc\\14.27.29110\\include\\iostream",
             "c:\\school(from c drive)\\computer graphics\\test_programming\\opengl_tester\\texture.h",
-            "c:\\school(from c drive)\\computer graphics\\test_programming\\opengl_tester\\libraries\\include\\stb\\stb_image.h"
+            "c:\\school(from c drive)\\computer graphics\\test_programming\\opengl_tester\\libraries\\include\\stb\\stb_image.h",
+            "c:\\school(from c drive)\\computer graphics\\test_programming\\opengl_tester\\libraries\\include\\imgui\\imgui.h",
+            "c:\\school(from c drive)\\computer graphics\\test_programming\\opengl_tester\\libraries\\include\\imgui\\imconfig.h",
+            "c:\\program files (x86)\\microsoft visual studio\\2019\\community\\vc\\tools\\msvc\\14.27.29110\\include\\stdarg.h",
+            "c:\\program files (x86)\\windows kits\\10\\include\\10.0.18362.0\\ucrt\\assert.h",
+            "c:\\school(from c drive)\\computer graphics\\test_programming\\opengl_tester\\libraries\\include\\imgui\\imgui_impl_glfw.h",
+            "c:\\school(from c drive)\\computer graphics\\test_programming\\opengl_tester\\libraries\\include\\imgui\\imgui_impl_opengl3.h"
         ],
         "Modules": []
     }
